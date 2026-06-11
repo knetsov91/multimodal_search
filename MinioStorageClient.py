@@ -12,3 +12,9 @@ class MinioStorageClient:
 
     def generate_presigned_url(self, data):
         return self.minio_client.presigned_get_object(self.bucket_name, data, expires=timedelta(hours=1))
+
+    def get_minio_image(self, image_name):
+        resp = self.minio_client.get_object(self.bucket_name, image_name)
+        file_data = resp.read()
+
+        return io.BytesIO(file_data)
