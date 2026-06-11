@@ -38,3 +38,30 @@ def login_post(
 	except Exception as e:
 		return templates.TemplateResponse(name="login.html", request=request, context={"session": request.session,
 																					   "error": "Something went wrong. Try again."})
+
+@router.get("/register")
+def register_view(request: Request):
+	return templates.TemplateResponse(name="register.html", request=request, context={"session": request.session})
+
+@router.post("/register")
+async def signup(request: Request,
+			 db: Session = Depends(get_db)):
+	errors = {}
+	form_data = await request.form()
+	try:
+		reg_data = RegisterForm(**form_data)
+	except ValidationError as e:
+		print(e.errors())
+		errors["email"] = e.errors()[0]['msg'].split(":")[1]
+
+	password = form_data.get("password", "")
+	email = form_data.get("email", "")
+	if not password or password == "" or len(password) < 6:
+		errors["password"] = "Password have to be at least 6 symbols"
+	if len(errors.keys()) > 0:
+		return templates.TemplateResponse(name="register.html", request=request, context={"session": request.session, "errors": errors})
+	try:
+		register(db, email, password)
+	except Exception as e:
+		return templates.TemplateResponse(name="register.html", request=request, context={"session": request.session, "error": "There is error"})
+	return RedirectResponse(url="/login", status_code=303)
