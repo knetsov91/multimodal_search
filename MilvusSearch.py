@@ -20,3 +20,15 @@ class MilvusSearch:
         )
 
         return r
+
+    def search_image(self, img_emb):
+        img_emb_norm = F.normalize(img_emb.cpu(), p=2, dim=-1).numpy().tolist()
+
+        res = self.milvus_client.search(
+            collection_name=self.collection_name,
+            anns_field="img_emb",
+            data=img_emb_norm,
+            limit=self.k,
+            output_fields=["m_id", "text", "img_name", "title"])
+        return res
+
