@@ -20,3 +20,14 @@ def get_user_by_email(db: Session, email: str):
     except Exception as e:
         raise e
 
+def login(db: Session, email: str, password: str):
+    try:
+        user = get_user_by_email(db, email)
+        if not user:
+            raise Exception
+        if not bcrypt.checkpw(password.encode("utf-8"), user.password):
+            raise Exception("Error")
+        return user
+    except Exception as e:
+        raise e
+
