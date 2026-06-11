@@ -65,3 +65,8 @@ async def signup(request: Request,
 	except Exception as e:
 		return templates.TemplateResponse(name="register.html", request=request, context={"session": request.session, "error": "There is error"})
 	return RedirectResponse(url="/login", status_code=303)
+
+@router.get("/logout")
+def logout(request: Request):
+	request.session.clear()
+	return RedirectResponse(url="/", status_code=303)
