@@ -16,3 +16,16 @@ class SearchResults(BaseModel):
 	title: str
 	id: str
 	is_admin: bool = False
+
+T = TypeVar("T")
+class PaginatedSearchResults(BaseModel, Generic[T]):
+	total: int
+	limit: int
+	offset: int
+	data: List[SearchResults]
+
+class SettingsChange(BaseModel):
+	alpha: Optional[float] = None
+	pagination_size: Optional[int] = None
+	retrieval_size: Optional[int] = None
+	reranking: Optional[bool] = False
