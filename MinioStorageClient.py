@@ -18,3 +18,15 @@ class MinioStorageClient:
         file_data = resp.read()
 
         return io.BytesIO(file_data)
+
+    async def upload_file(self, file):
+        await file.seek(0)
+        file_content = await file.read()
+        file_size = len(file_content)
+        file_buffer = io.BytesIO(file_content)
+
+        self.minio_client.put_object(bucket_name=self.bucket_name,
+                                object_name=file.filename,
+                                data=file_buffer,
+                                length=file_size,
+                                content_type=file.content_type)
