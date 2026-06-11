@@ -14,3 +14,9 @@ def register(db: Session, email: str, password: str):
     except Exception as e:
         raise e
 
+def get_user_by_email(db: Session, email: str):
+    try:
+        return db.query(User).filter(User.email == email).first()
+    except Exception as e:
+        raise e
+
