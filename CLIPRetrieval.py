@@ -20,3 +20,11 @@ class CLIPRetrieval(BaseRetrieval):
 			output = self.model.get_text_features(**inputs)
 			output = output.pooler_output
 		return output
+
+	def image_embedding(self, image):
+		inputs = self.image_processor([Image.open(image)], return_tensors="pt")
+		inputs["pixel_values"] = inputs['pixel_values'].to(device)
+		with torch.no_grad():
+			img_emb = self.model.get_image_features(**inputs)
+			img_emb = img_emb.pooler_output
+		return img_emb
