@@ -14,7 +14,10 @@ from UnsupportedTypeException import UnsupportedTypeException
 from services.recipe_service import RecipeService
 from utils import process_query
 import os
+import logging
 from pymilvus import MilvusClient
+
+logger = logging.getLogger(__name__)
 
 config = BitsAndBytesConfig(load_in_4bit=True,
 							bnb_4bit_compute_dtype=torch.bfloat16,
@@ -71,6 +74,40 @@ async def search(
 	fetch_size = count if count else settings.retrieval_size
 	try:
 		result = await process_query(text_query, image_query, fetch_size, final_alpha, reranking=rerank)
+	except Exception as e:
+		logger.exception(
+			"v1 search failed",
+			extra={"text_query": text_query, "alpha": final_alpha, "fetch_size": fetch_size, "rerank": rerank}
+		)
+		if type(e) == UnsupportedTypeException:
+			raise HTTPException(status_code=400, detail=str(e))
+		raise HTTPException(status_code=400, detail="Something went wrong")
+
+	return result
+
+@router.post("/v2/search", response_model=List[SearchResults])
+async def search_v2(
+	request: Request,
+	image_query: Optional[UploadFile] = File(None),
+	text_query: Optional[str] = Form(""),
+	count: Optional[int] = Form(None),
+	alpha: Optional[float] = Form(None),
+	rerank: Optional[bool] = Form(False),
+	settings: Settings = Depends(get_settings),
+
+):
+	user = request.session.get("user")
+
+	if text_query == "" and  (image_query is None or image_query.filename == ""):
+		raise HTTPException(status_code=400, detail="Please provide text,image or both")
+	result = []
+	final_alpha = alpha if alpha else settings.alpha
+	fetch_size = count if count else settings.retrieval_size
+	try:
+		result = await two_stage_retrieve.process_query(text_query, image_query, fetch_size, final_alpha, reranking=rerank)
+		if user and user["role"] == "admin":
+			for i in range(len(result)):
+				result[i].is_admin =True
 	except Exception as e:
 		print(e)
 		print(type(e))
