@@ -39,3 +39,11 @@ def load_retriever():
 	image_processor = AutoImageProcessor.from_pretrained(MODEL_NAME)
 	text_tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
+def text_embedding(model, tokenizer, txt):
+  inputs = tokenizer(txt, truncation=True, return_tensors="pt")
+  inputs = {k:v.to(device) for k,v in inputs.items()}
+  with torch.no_grad():
+    output= model.get_text_features(**inputs)
+    output = output.pooler_output
+  return output
+
