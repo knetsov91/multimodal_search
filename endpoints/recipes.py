@@ -69,3 +69,19 @@ async def fetch_recipes(
 	res = recipe_service.get_recipes(offset=offset, limit=limit)
 
 	return res
+
+@router.delete("/api/v1/recipes/{id}")
+async def delete_recipe(id: int):
+	try:
+		recipe_service.delete_recipe(id)
+	except Exception as e:
+		raise HTTPException(status_code=400, detail=str("Something went wrong"))
+	return RedirectResponse(url="/admin", status_code=303)
+
+@router.put("/api/v1/recipes/{id}")
+async def delete_recipe(id: int):
+	try:
+		milvus_client_v2.delete(str(id))
+	except Exception as e:
+		raise HTTPException(status_code=400, detail=str("Something went wrong"))
+	return RedirectResponse(url="/admin", status_code=303)
