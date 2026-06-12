@@ -59,3 +59,13 @@ async def upload(
 	except Exception as e:
 		raise HTTPException(status_code=400, detail=str(e))
 	return RedirectResponse(url="/admin", status_code=303)
+
+@router.get("/api/v1/recipes", response_model=PaginatedSearchResults[SearchResults])
+async def fetch_recipes(
+		offset: int = 0,
+		limit: int = Query(default=10, le=100),
+		settings: Settings = Depends(get_settings)
+):
+	res = recipe_service.get_recipes(offset=offset, limit=limit)
+
+	return res
