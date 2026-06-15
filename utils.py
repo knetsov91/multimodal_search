@@ -84,3 +84,56 @@ def get_min_max(results):
 	scores = [r['distance'] for r in results]
 	return min(scores), max(scores)
 
+def late_fusion_with_norm(image_list, text_list, K=TOP_K, alpha=0.5, threshold=50):
+
+	if alpha > 1.0:
+		raise Exception("Illegal alpha")
+	raw_images = image_list[0] if len(image_list) > 0 else []
+	raw_texts = text_list[0] if len(text_list) > 0 else []
+
+	if len(image_list) == 0:
+		alpha == 1.0
+	if len(text_list) == 0:
+		alpha == 0.0
+	image_set = set()
+	text_set  = set()
+
+	min_i, max_i = get_min_max(raw_images)
+	min_t, max_t = get_min_max(raw_texts)
+
+	fused_results = {}
+
+	for img in raw_images:
+		m_id = img['m_id']
+		image_set.add(m_id)
+		norm_img = (img['distance'] - min_i) / (max_i - min_i + 1e-6)  # avoid division by zero
+		img_score = (1 - alpha) *  norm_img
+		fused_results[m_id] = {
+			"score": img_score,
+			"text": img['entity']['text'],
+			"img_name": img['entity']['img_name'],
+			"title": img['entity']['title']
+		}
+
+	for txt in raw_texts:
+		m_id = txt['m_id']
+		text_set.add(m_id)
+		norm_txt = (txt['distance'] - min_t) / (max_t - min_t + 1e-6)
+		txt_score = alpha * norm_txt
+		if m_id in fused_results:
+			fused_results[m_id]['score'] += txt_score
+		else:
+			fused_results[m_id] = {
+				"score":txt_score,
+				"text": txt['entity']['text'],
+				"img_name": txt['entity']['img_name'],
+				"title": txt['entity']['title']
+
+			}
+
+	sorted_res = sorted(fused_results.items(), key=lambda x: x[1]['score'], reverse=True)
+
+	return {
+		"result": sorted_res[:threshold]
+	}
+
