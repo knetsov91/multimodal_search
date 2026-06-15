@@ -283,3 +283,15 @@ def get_minio_image(image_name):
 
 	return io.BytesIO(filde_data)
 
+async def rerank(image_query, text_query, data):
+	for r in data:
+		rank_res = rank(qwen, qwen_processor,
+					 search_image= image_query,
+					 result_image=get_minio_image(r[1]['img_name']),
+					 search_text=text_query,
+					 recipe_title=r[1]['title'],
+					 recipe_text=r[1]['text'])
+		r[1]['rerank_score'] = rank_res
+
+	data = sorted(data, key=lambda x: -x[1]['rerank_score'])
+
