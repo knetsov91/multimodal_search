@@ -78,3 +78,9 @@ def search_image(img_emb, k):
 		output_fields=["m_id", "text", "img_name", "title"])
 	return res
 
+def get_min_max(results):
+	if not results:
+		return 0.0, 1.0
+	scores = [r['distance'] for r in results]
+	return min(scores), max(scores)
+
