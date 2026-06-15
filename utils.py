@@ -67,3 +67,14 @@ def search_text(txt_emb, k):
 
 	return r
 
+def search_image(img_emb, k):
+	img_emb_norm = F.normalize(img_emb.cpu(), p=2, dim=-1).numpy().tolist()
+
+	res = milvus_client.search(
+		collection_name=COLLECTION_NAME,
+		anns_field="img_emb",
+		data=img_emb_norm,
+		limit=k,
+		output_fields=["m_id", "text", "img_name", "title"])
+	return res
+
