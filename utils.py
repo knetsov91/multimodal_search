@@ -277,3 +277,9 @@ def rank_batch(model, processor, data, search_image_data=None, search_text=None)
 
 	data.sort(key=lambda x: x[1]['rerank_score'], reverse=True)
 
+def get_minio_image(image_name):
+	resp = minio_client.get_object(BUCKET_NAME, image_name)
+	filde_data = resp.read()
+
+	return io.BytesIO(filde_data)
+
