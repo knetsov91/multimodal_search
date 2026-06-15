@@ -295,3 +295,37 @@ async def rerank(image_query, text_query, data):
 
 	data = sorted(data, key=lambda x: -x[1]['rerank_score'])
 
+async def process_query(text_query: str, image_query: UploadFile, results_count, alpha, reranking=False):
+	img_emb = None
+	text_emb = None
+	image_emb_res = []
+	text_emb_res = []
+	img_obj = None
+
+	if image_query is not None and image_query.filename != "":
+		try:
+			file_content = await image_query.read()
+			img_obj = io.BytesIO(file_content)
+			img_emb = image_embedding(model, image_processor, img_obj)
+			image_emb_res = search_image(img_emb, TOP_K)
+		except Exception as e:
+			print(e)
+			raise UnsupportedTypeException("File type not supported")
+
+	if text_query != "":
+		text_emb = text_embedding(model, text_tokenizer, text_query)
+		text_emb_res = search_text(text_emb, TOP_K)
+
+	fused = late_fusion_with_norm(image_emb_res, text_emb_res, alpha=alpha, threshold=results_count)
+
+	if reranking:
+
+		await run_in_threadpool(rank_batch, qwen, qwen_processor, fused['result'], img_obj, text_query)
+
+	response = []
+	for data in fused["result"]:
+		m = minio_client.presigned_get_object(BUCKET_NAME, data[1]['img_name'], expires=timedelta(hours=1))
+		response.append(SearchResults(text=data[1]['text'], image_path=m, title=data[1]['title']))
+
+	return response
+
