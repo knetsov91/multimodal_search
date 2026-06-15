@@ -329,3 +329,32 @@ async def process_query(text_query: str, image_query: UploadFile, results_count,
 
 	return response
 
+def evaluate(alpha):
+	res = []
+	with open("./val_data/data.json") as f:
+		data = json.load(f)
+
+	for d in data:
+		file_path = "./val_data/" + d['image_name']
+		text_query = d['recipe_name']
+		img_emb = image_embedding(model, processor, file_path)
+		image_emb_res = search_image(img_emb, TOP_K)
+
+		text_emb = text_embedding(model, tokenizer, text_query)
+		text_emb_res = search_text(text_emb, TOP_K)
+
+		fused = late_fusion_with_norm(image_emb_res, text_emb_res, alpha=alpha, threshold=20)
+
+		print(fused["overlap_rate_perc"])
+		res.append({"search": {"image": d['image_name'], "text": d['recipe_name']}, "result": fused})
+	return res
+
+def get_image(bucket_name, object_name):
+	bucket = minio_client.bucket_exists(BUCKET_NAME)
+	if not bucket:
+		minio_client.make_bucket(BUCKET_NAME)
+		print("bucket created")
+	else:
+		print("bucket exists")
+
+	minio_client.fget_object(BUCKET_NAME, "f1.jpg", f"./tmp/{object_name}")
