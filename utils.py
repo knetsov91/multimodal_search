@@ -47,3 +47,11 @@ def text_embedding(model, tokenizer, txt):
     output = output.pooler_output
   return output
 
+def image_embedding(model, processor, image_path):
+  inputs = processor([Image.open(image_path)], return_tensors="pt")
+  inputs["pixel_values"] = inputs['pixel_values'].to(device)
+  with torch.no_grad():
+    img_emb = model.get_image_features(**inputs)
+    img_emb = img_emb.pooler_output
+  return img_emb
+
