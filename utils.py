@@ -55,3 +55,15 @@ def image_embedding(model, processor, image_path):
     img_emb = img_emb.pooler_output
   return img_emb
 
+def search_text(txt_emb, k):
+	txt_emb_norm = F.normalize(txt_emb.cpu(), p=2, dim=-1).numpy().tolist()
+	r = milvus_client.search(
+		collection_name=COLLECTION_NAME,
+		anns_field="text_emb",
+		data=txt_emb_norm,
+		limit=k,
+		output_fields=["m_id","text", "img_name", "title"]
+	)
+
+	return r
+
