@@ -137,3 +137,55 @@ def late_fusion_with_norm(image_list, text_list, K=TOP_K, alpha=0.5, threshold=5
 		"result": sorted_res[:threshold]
 	}
 
+def rank(model, processor, search_image=None, result_image=None, search_text=None, recipe_title=None,
+		  recipe_text=None):
+	query = "Recipe title: {}\n. Recipe text: {}".format(recipe_title, recipe_text)
+
+	search_image_file = Image.open(search_image)
+	result_image_file = Image.open(result_image)
+	prompt5 = f"""
+Goal: Culinary Similarity Evaluation.
+Task: Evaluate the relevance between the two images provided below.
+- Compare [IMAGE_A] (request from user) with [IMAGE_B] (the recipe found).
+- Also consider the Text: "{search_text}" (user query) vs Founded recipe text: "{recipe_title}\n{recipe_text}".
+Criteria:
+1. Ignore the presentation/setting (e.g. cake stand vs parchment paper).
+2. Focus on: Core ingredients (chocolate, nuts, meat) and the food category.
+3. A cake and chocolate cupcake share the same core ingredients (Chocolate).
+
+Scale:
+- 1.0: Exact match.
+- 0.7-0.9: High similarity in core ingredients (e.g. both are chocolate-based desserts).
+- 0.0: No shared ingredients or category (e.g., Chocolate vs Salad).
+
+Return ONLY the score based on the above rules.
+"""
+	messages = [
+		{
+			"role": "user",
+			"content": [
+
+				{"type": "text", "text": "[IMAGE_A]: "},
+				{"type": "image", "image": search_image_file},
+				{"type": "text", "text": "\n[IMAGE_B]: "},
+				{"type": "image", "image": result_image_file},
+				{"type": "text", "text": f"\n{prompt5}"},
+
+			]
+		}
+	]
+
+	inputs = processor.apply_chat_template(
+		messages,
+		tokenize=False,
+		add_generation_prompt=True
+	)
+
+	inputs = processor(max_pixels=512 * 512, text=inputs, images=[search_image_file, result_image_file], return_tensors="pt")
+	inputs = {k: v.to(device) for k, v in inputs.items()}
+	output_ids = model.generate(**inputs, max_new_tokens=128)
+	output_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs['input_ids'], output_ids)]
+	out_text = processor.batch_decode(output_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+	print(out_text)
+	return float(out_text[0])
+
