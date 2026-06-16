@@ -1,0 +1,29 @@
+{% block scripts %}
+   <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}" />
+    <script src="{{ url_for('static', path='admin_script.js') }}">
+{% endblock %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 style="text-align:center">Register</h1>
+    <div id="container">
+        <form id="register" method="POST" action="/register">
+            <label for="email">Email</label>
+            <input id="email" type="text" name="email" />
+            {% if errors and errors.email %}
+                <p>{{ errors.email  }}</p>
+            {% endif %}
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+             {% if errors and errors.password %}
+                <p>{{ errors.password  }}</p>
+            {% endif %}
+            <button type="submit" >Register</button>
+        </form>
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
+        <p id="recipe-error"></p>
+    </div>
+{% endblock %}
