@@ -1,0 +1,47 @@
+{% block scripts %}
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}" />
+    <script src="{{ url_for('static', path='script.js') }}">
+{% endblock %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="container">
+    <div id="header">
+        <form id="uform" >
+            <input type="file" accept="image/*" name="image_query" />
+            <label for="recipe_text"> Recipe text</label>
+            <input id="recipe_text" type="text" name="text_query" placeholder="Recipe text" />
+            {% if session.user and session.user.role =="admin" %}
+                <label for="result_num"> Result numbers</label>
+                <input id="result_num" placeholder="Result numbers" value="{{settings.retrieval_size}}" type="number" name="count" />
+                <div id="checkbox-div">
+                <label for="rerank">Rerank</label>
+                <input id="rerank" type="checkbox" name="rerank" {% if settings.reranking %} checked {% endif %}  />
+                </div>
+                <label for="alpha"> Choose alpha</label>
+                <select id="alpha" name="alpha">
+                    {% for alpha in [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0] %}
+                    <option value="{{ alpha }}" {% if alpha == settings.alpha %} selected {% endif %} >
+                    {% if alpha == 0.0 %}
+                        Image-only
+                    {% elif alpha == 1.0%}
+                           Text-only
+                    {% else %}
+                        {{ alpha }}
+                    {% endif %}
+                    </option>
+                   {% endfor %}
+                </select>
+            {% endif %}
+            <div id="btns">
+                <button id="search_btn" type="submit">Search</button>
+                <button type="button" id="reset-btn">Clear</button>
+            </div>
+        </form>
+        <img id="preview" />
+    </div>
+    <div id="loading">Loading</div>
+    <div id="results"></div>
+</div>
+{% endblock %}
