@@ -72,8 +72,11 @@ async def search(
 	result = []
 	final_alpha = alpha if alpha else settings.alpha
 	fetch_size = count if count else settings.retrieval_size
+	logger.info("v1 search request", extra={"text_query": text_query, "alpha": final_alpha, "fetch_size": fetch_size, "rerank": rerank})
 	try:
 		result = await process_query(text_query, image_query, fetch_size, final_alpha, reranking=rerank)
+		if not result:
+			logger.warning("v1 search returned no results", extra={"text_query": text_query, "alpha": final_alpha})
 	except Exception as e:
 		logger.exception(
 			"v1 search failed",
@@ -109,8 +112,10 @@ async def search_v2(
 			for i in range(len(result)):
 				result[i].is_admin =True
 	except Exception as e:
-		print(e)
-		print(type(e))
+		logger.exception(
+			"v2 search failed",
+			extra={"text_query": text_query, "alpha": final_alpha, "fetch_size": fetch_size, "rerank": rerank, "user": user}
+		)
 		if type(e) == UnsupportedTypeException:
 			raise HTTPException(status_code=400, detail=str(e))
 		raise HTTPException(status_code=400, detail="Something went wrong")
