@@ -21,3 +21,19 @@ async def admin(request: Request, settings: Settings = Depends(get_settings)):
                                             "settings": settings,
                                       }
                                       )
+
+@router.patch("/api/v1/settings")
+async def update(new_settings: SettingsChange,
+                 settings: Settings = Depends(get_settings)):
+    settings_params = new_settings.model_dump(exclude_unset=True)
+    for key,value in settings_params.items():
+
+        if not hasattr(settings, key.lower()):
+            raise HTTPException(status_code=400, detail="Invalid settings key")
+
+        setattr(settings, key.lower(), value)
+        set_key("config.env",key.upper(), value, quote_mode="never")
+        os.environ[key.lower()] = str(value)
+        load_dotenv("config.env", override=True)
+        get_settings.cache_clear()
+    return ""
