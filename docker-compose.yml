@@ -117,12 +117,14 @@ services:
       POSTGRES_USERNAME: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_HOST: db
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672//
 
     depends_on:
       - db
       - standalone
       - attu
       - minio
+      - rabbitmq
     volumes:
       - $HOME/.cache/huggingface:/mnt/hf_cache
     deploy:
