@@ -6,7 +6,7 @@ from services.recipe_service import RecipeService
 from MinioStorageClient import MinioStorageClient
 from MilvusSearch import MilvusSearch
 from CLIPRetrieval import CLIPRetrieval
-from utillities import utils
+from utilities import utils
 from schemas.schemas import SearchResults, PaginatedSearchResults
 from config import Settings, get_settings
 

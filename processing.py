@@ -1,4 +1,4 @@
-from utillities import (MilvusClient, milvus_client, COLLECTION_NAME,
+from utilities import (MilvusClient, milvus_client, COLLECTION_NAME,
                         DataType, text_tokenizer, image_processor, device,
                         DATASET_PATH, model as clip_model, minio_client,
                         BUCKET_NAME)
@@ -10,7 +10,7 @@ import pandas as pd
 from fastapi import File, UploadFile
 import io
 import torch.nn.functional as F
-from utillities import text_embedding, image_embedding, model
+from utilities import text_embedding, image_embedding, model
 
 MINIO_HOST="localhost:9000"
 TRAIN_IMAGES_PATH="/home/kosio/.cache/kagglehub/datasets/jeromeblanchet/recipeqa-nlp-dataset/versions/1/images/images-qa/train/images-qa"
