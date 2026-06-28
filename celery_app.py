@@ -27,4 +27,5 @@ celery_app.conf.update(
         Queue("celery", durable=True),
     ),
     task_default_queue="celery",
+    worker_pool="solo",
 )
