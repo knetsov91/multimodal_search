@@ -19,6 +19,15 @@ class MinioStorageClient:
 
         return io.BytesIO(file_data)
 
+    def upload_bytes(self, file_bytes: bytes, filename: str, content_type: str = "application/octet-stream"):
+        self.minio_client.put_object(
+            bucket_name=self.bucket_name,
+            object_name=filename,
+            data=io.BytesIO(file_bytes),
+            length=len(file_bytes),
+            content_type=content_type,
+        )
+
     async def upload_file(self, file):
         await file.seek(0)
         file_content = await file.read()
