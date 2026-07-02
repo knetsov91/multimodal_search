@@ -19,22 +19,27 @@ from pymilvus import MilvusClient
 
 logger = logging.getLogger(__name__)
 
-config = BitsAndBytesConfig(load_in_4bit=True,
-							bnb_4bit_compute_dtype=torch.bfloat16,
-							bnb_4bit_quant_type="nf4",
-							bnb_4bit_use_double_quant=True)
-
-qwen = Qwen3VLForConditionalGeneration.from_pretrained("Qwen/Qwen3-VL-4B-Instruct",
-													   torch_dtype=torch.float16,
-													   device_map="auto",
-													   quantization_config=config,
-													   attn_implementation="sdpa",
-													   low_cpu_mem_usage=True,
-													  )
-													   #local_files_only=True)
-
-qwen_processor =  AutoProcessor.from_pretrained("Qwen/Qwen3-VL-4B-Instruct", max_pixels=128*28*28)
 settings = get_settings()
+
+qwen = None
+qwen_processor = None
+if settings.reranking:
+	config = BitsAndBytesConfig(load_in_4bit=True,
+								bnb_4bit_compute_dtype=torch.bfloat16,
+								bnb_4bit_quant_type="nf4",
+								bnb_4bit_use_double_quant=True)
+
+	qwen = Qwen3VLForConditionalGeneration.from_pretrained("Qwen/Qwen3-VL-4B-Instruct",
+														   torch_dtype=torch.float16,
+														   device_map="auto",
+														   quantization_config=config,
+														   attn_implementation="sdpa",
+														   low_cpu_mem_usage=True,
+														  )
+														   #local_files_only=True)
+
+	qwen_processor =  AutoProcessor.from_pretrained("Qwen/Qwen3-VL-4B-Instruct", max_pixels=128*28*28)
+
 MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
 BUCKET_NAME="images"
 COLLECTION_NAME="cooking_3000"
