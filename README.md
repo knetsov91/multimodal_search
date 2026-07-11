@@ -40,3 +40,11 @@ Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `loc
 - CLIP ViT-B/16 (retrieval)
 - Qwen3-VL-4B-Instruct 4-bit NF4 (reranking)
 - Jinja2 templates (frontend)
+
+## Demos
+
+Playwright scripts that run the app in a browser and record the session as a gif. The app must be running at `http://localhost:8081` first.
+
+- **demo/search_demo.py** — text search, image search and combined text+image search, scrolling through results each time. Saves **assets/text_image_combined_search.gif**.
+
+![Search demo](assets/text_image_combined_search.gif)
