@@ -24,10 +24,10 @@ There are two config files:
 
 `.env`:
 
-- `POSTGRES_USERNAME=postgres`
-- `POSTGRES_PASSWORD=postgres`
-- `MINIO_USER=minioadmin`
-- `MINIO_PASSWORD=minioadmin`
+- `POSTGRES_USERNAME=<postgres-username>`
+- `POSTGRES_PASSWORD=<postgres-password>`
+- `MINIO_USER=<minio-user>`
+- `MINIO_PASSWORD=<minio-password>`
 - `DOCKER_VOLUME_DIRECTORY=/path/to/volumes`
 
 Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `localhost` and can be overridden for Docker deployments.
