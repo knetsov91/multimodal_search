@@ -18,7 +18,7 @@ There are two config files:
 - `ALPHA=0.8` — weight between image and text scores in late fusion (0.0 = image only, 1.0 = text only)
 - `RETRIEVAL_SIZE=6` — number of results returned per search
 - `PAGINATION_SIZE=10` — page size for the recipe list view
-- `RERANKING=False` — enable Qwen reranking by default
+- `RERANKING=False` — set to `True` to enable Qwen reranking (off by default)
 - `BUCKET_NAME=images` — MinIO bucket where recipe images are stored
 - `COLLECTION_NAME=cooking_3000` — Milvus collection name
 
