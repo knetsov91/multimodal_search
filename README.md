@@ -34,12 +34,18 @@ Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `loc
 
 **Stack:**
 - FastAPI + Uvicorn
-- Milvus (vector search)
+- Milvus (vector search, recipe title/text/embeddings)
 - MinIO (image storage)
-- PostgreSQL (user/recipe metadata)
+- PostgreSQL (user accounts, Celery task results)
 - CLIP ViT-B/16 (retrieval)
 - Qwen3-VL-4B-Instruct 4-bit NF4 (reranking)
 - Jinja2 templates (frontend)
+
+## Async processing
+
+Recipe uploads and edits are handled by a Celery worker instead of inline in the request handler. The **/api/v1/recipes** endpoints enqueue a **process_recipe** task and return immediately; the worker generates the CLIP embeddings, uploads the image to MinIO and writes to Milvus in the background. RabbitMQ is the broker and PostgreSQL stores task results and progress. Flower gives a UI for monitoring task status.
+
+**start.sh** launches both the Celery worker and the Uvicorn server in the container.
 
 ## Demos
 
