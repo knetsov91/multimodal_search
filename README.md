@@ -47,6 +47,21 @@ Recipe uploads and edits are handled by a Celery worker instead of inline in the
 
 **start.sh** launches both the Celery worker and the Uvicorn server in the container.
 
+## Docker
+
+`docker-compose up` starts the full stack:
+
+- **restApi** — the FastAPI app, built from `Dockerfile` using the `nvidia/cuda` base image, port 8081
+- **standalone** — Milvus, port 19530
+- **attu** — Milvus web UI, port 8001
+- **minio** — object storage, port 9000 (API) and 9001 (console)
+- **etcd** — Milvus's metadata store
+- **db** — PostgreSQL, port 5432
+- **rabbitmq** — Celery broker, port 5672 (AMQP) and 15672 (management UI)
+- **flower** — Celery task monitoring UI, port 5555
+
+The restApi container reserves an NVIDIA GPU, so a GPU and the NVIDIA Container Toolkit are required to run it.
+
 ## Data
 
 Initial recipe data used to seed the app comes from the [RecipeQA NLP dataset](https://www.kaggle.com/datasets/jeromeblanchet/recipeqa-nlp-dataset/data) on Kaggle — images are stored in MinIO and recipe text is embedded and stored in Milvus.
