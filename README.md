@@ -72,4 +72,8 @@ Playwright scripts that run the app in a browser and record the session as a gif
 
 - **demo/search_demo.py** — text search, image search and combined text+image search, scrolling through results each time. Saves **assets/text_image_combined_search.gif**.
 
+### Text, image and combined search
+
+Runs a text search, an image search, then a combined text+image search, scrolling through the results each time.
+
 ![Search demo](assets/text_image_combined_search.gif)
