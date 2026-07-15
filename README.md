@@ -34,9 +34,9 @@ Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `loc
 
 **Stack:**
 - FastAPI + Uvicorn
-- Milvus (vector search)
+- Milvus (vector search, recipe title/text/embeddings)
 - MinIO (image storage)
-- PostgreSQL (user/recipe metadata)
+- PostgreSQL (user accounts, Celery task results)
 - CLIP ViT-B/16 (retrieval)
 - Qwen3-VL-4B-Instruct 4-bit NF4 (reranking)
 - Jinja2 templates (frontend)
