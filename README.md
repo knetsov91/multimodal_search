@@ -47,6 +47,10 @@ Recipe uploads and edits are handled by a Celery worker instead of inline in the
 
 **start.sh** launches both the Celery worker and the Uvicorn server in the container.
 
+## Data
+
+Initial recipe data used to seed the app comes from the [RecipeQA NLP dataset](https://www.kaggle.com/datasets/jeromeblanchet/recipeqa-nlp-dataset/data) on Kaggle — images are stored in MinIO and recipe text is embedded and stored in Milvus.
+
 ## Demos
 
 Playwright scripts that run the app in a browser and record the session as a gif. The app must be running at `http://localhost:8081` first.
