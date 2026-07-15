@@ -18,16 +18,16 @@ There are two config files:
 - `ALPHA=0.8` — weight between image and text scores in late fusion (0.0 = image only, 1.0 = text only)
 - `RETRIEVAL_SIZE=6` — number of results returned per search
 - `PAGINATION_SIZE=10` — page size for the recipe list view
-- `RERANKING=False` — enable Qwen reranking by default
+- `RERANKING=False` — set to `True` to enable Qwen reranking (off by default)
 - `BUCKET_NAME=images` — MinIO bucket where recipe images are stored
 - `COLLECTION_NAME=cooking_3000` — Milvus collection name
 
 `.env`:
 
-- `POSTGRES_USERNAME=postgres`
-- `POSTGRES_PASSWORD=postgres`
-- `MINIO_USER=minioadmin`
-- `MINIO_PASSWORD=minioadmin`
+- `POSTGRES_USERNAME=<postgres-username>`
+- `POSTGRES_PASSWORD=<postgres-password>`
+- `MINIO_USER=<minio-user>`
+- `MINIO_PASSWORD=<minio-password>`
 - `DOCKER_VOLUME_DIRECTORY=/path/to/volumes`
 
 Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `localhost` and can be overridden for Docker deployments.
@@ -40,3 +40,11 @@ Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `loc
 - CLIP ViT-B/16 (retrieval)
 - Qwen3-VL-4B-Instruct 4-bit NF4 (reranking)
 - Jinja2 templates (frontend)
+
+## Demos
+
+Playwright scripts that run the app in a browser and record the session as a gif. The app must be running at `http://localhost:8081` first.
+
+- **demo/search_demo.py** — text search, image search and combined text+image search, scrolling through results each time. Saves **assets/text_image_combined_search.gif**.
+
+![Search demo](assets/text_image_combined_search.gif)
