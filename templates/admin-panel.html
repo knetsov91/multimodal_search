@@ -1,0 +1,43 @@
+{% block scripts %}
+   <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}" />
+    <script src="{{ url_for('static', path='admin_script.js') }}">
+{% endblock %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 style="text-align:center">Admin Panel</h1>
+<div id="container">
+    <div id="header">
+        <form id="settings" >
+            <label for="result_num"> Result numbers</label>
+            <input min="3" id="result_num" value="{{settings.retrieval_size}}" placeholder="Result numbers" type="number" name="retrieval_size" />
+             <div id="checkbox-div">
+                <label for="rerank">Rerank</label>
+                <input id="rerank" type="checkbox" name="reranking"  {% if settings.reranking %} checked {% endif %} />
+                </div>
+            <label for="alpha"> Choose alpha</label>
+             <select id="alpha" name="alpha">
+                    {% for alpha in [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0] %}
+                    <option value="{{ alpha }}" {% if alpha == settings.alpha %} selected {% endif %} >
+                    {% if alpha == 0.0 %}
+                        Image-only
+                    {% elif alpha == 1.0%}
+                           Text-only
+                    {% else %}
+                        {{ alpha }}
+                    {% endif %}
+                    </option>
+                   {% endfor %}
+            </select>
+
+            <div id="btns">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+        <a class="add-recipe-btn" href="/recipe-add">Add recipe</a>
+        <a class="add-recipe-btn" href="/recipes">Show recipes recipe</a>
+    </div>
+    <p id="settings-error"></p>
+</div>
+{% endblock %}

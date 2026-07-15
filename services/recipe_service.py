@@ -78,3 +78,11 @@ class RecipeService:
 									  ids=[id], output_fields=["img_name", "title", "text", "img_emb"])
 
 		return recipe
+	def insert_recipe(self, data):
+		self.milvus_client.insert(
+			collection_name=self.settings.collection_name,
+			data=data
+		)
+
+	def delete_recipe(self, id):
+		self.milvus_client.delete(collection_name=self.settings.collection_name, ids=[id])

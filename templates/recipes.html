@@ -1,0 +1,25 @@
+{% block scripts %}
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}" />
+<script src="{{ url_for('static', path='utils.js') }}">    </script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    var result_count = document.getElementById("result_count")
+    loadRecipes(0, 10, result_count)
+})
+
+
+    </script>
+{% endblock %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="container">
+  <div id="loading">Loading</div>
+    <div id="result_count"></div>
+    <div id="results"></div>
+    <div id="pagination"></div>
+</div>
+{% endblock %}

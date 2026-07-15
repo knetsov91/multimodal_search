@@ -1,0 +1,26 @@
+
+{% block scripts %}
+   <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}" />
+    <script src="{{ url_for('static', path='admin_script.js') }}">
+{% endblock %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 style="text-align:center">Add recipe</h1>
+    <div id="container">
+        <div id="header">
+
+            <form id="recipe_form" >
+                <input type="file" accept="image/*" name="file" />
+                <label for="recipe_title">Title</label>
+                <input id="recipe_title" type="text" name="recipe_title"  />
+                <label for="recipe_text">Text</label>
+                <textarea id="recipe_text" name="recipe_text" /></textarea>
+                <button type="submit" id="create-btn">Add</button>
+            </form>
+             <img  id="preview" />
+        </div>
+    <p id="recipe-error"></p>
+    </div>
+{% endblock %}

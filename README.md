@@ -6,6 +6,32 @@ A multimodal search engine for recipes, supporting text queries, image queries, 
 
 The system uses a two-stage retrieval pipeline. In the first stage, CLIP encodes the query and retrieves the closest matches from a Milvus vector index using late fusion of text and image similarity scores. In the second stage (optional), a vision-language model reranks the top results by visually comparing each candidate against the original query.
 
+## Configuration
+
+There are two config files:
+
+- `config.env` — runtime settings read by the app via pydantic-settings
+- `.env` — secrets used by Docker Compose (Postgres and MinIO credentials)
+
+`config.env`:
+
+- `ALPHA=0.8` — weight between image and text scores in late fusion (0.0 = image only, 1.0 = text only)
+- `RETRIEVAL_SIZE=6` — number of results returned per search
+- `PAGINATION_SIZE=10` — page size for the recipe list view
+- `RERANKING=False` — enable Qwen reranking by default
+- `BUCKET_NAME=images` — MinIO bucket where recipe images are stored
+- `COLLECTION_NAME=cooking_3000` — Milvus collection name
+
+`.env`:
+
+- `POSTGRES_USERNAME=postgres`
+- `POSTGRES_PASSWORD=postgres`
+- `MINIO_USER=minioadmin`
+- `MINIO_PASSWORD=minioadmin`
+- `DOCKER_VOLUME_DIRECTORY=/path/to/volumes`
+
+Service hostnames (`MILVUS_HOST`, `MINIO_HOST`, `POSTGRES_HOST`) default to `localhost` and can be overridden for Docker deployments.
+
 **Stack:**
 - FastAPI + Uvicorn
 - Milvus (vector search)

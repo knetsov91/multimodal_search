@@ -1,0 +1,200 @@
+* {
+    font-size: 16px;
+}
+
+.res p {
+    border: 1px solid black;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+}
+.results {
+    display: flex;
+    justify-content: column;
+
+    padding: 50px;
+    margin:50px;
+}
+.recipe {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 10px;
+    min-height: 350px;
+}
+.recipe-img {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+
+}
+.recipe-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
+    padding: 10px;
+}
+.recipe-actions button {
+    margin-right: 10px;
+    padding: 8px;
+    background-color: red;
+    border-radius: 10px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+
+}
+.recipe-actions a {
+    text-decoration: none;
+    background-color: Chartreuse;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: bold;
+    font-weight: bold;
+
+}
+.recipe-actions a:hover {
+background-color: CadetBlue ;
+}
+.recipe-actions button:hover {
+    background-color: crimson;
+    cursor: pointer;
+}
+.recipe-header {
+width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.recipe-header h1 {
+margin: 0 auto;
+}
+.recipe-img img {
+   max-width: 100%;
+   max-height: 100%;
+   object-fit:cover;
+   object-position: center;
+}
+.recipe-group {
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+    align-items: center;
+    max-height: 350px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+#header {
+
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px;
+    width: 50%;
+    min-height: 300px;
+
+}
+.btn-paginate {
+    width: 40px;
+    height: 40px;
+    border-radius:  5px;
+    margin: 3px;
+    background-color: #F8F9Fa;
+    padding: 3px;
+}
+.btn-paginate:hover {
+    background-color: #E2E6EA;
+
+}
+.active {
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #007BFF;
+
+}
+#preview {
+    position: relative;
+    display: none;
+    max-width: 50%;
+    max-height: 400px;
+    position: relative;
+}
+#btns {
+    display: flex;
+    flex-direction: rows;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+
+   width: 100%;
+   align-items: center;
+}
+
+.nav-links a{
+
+    text-decoration: none;
+}
+.push-right {
+    margin-left: auto;
+}
+
+.nav-links a:hover{
+    color: #ffca28;
+}
+.add-recipe-btn {
+    text-decoration: none;
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+
+}
+.add-recipe-btn:hover {
+        background-color: gray;
+
+}
+
+
+#loading {
+    display: none;
+
+}
+input[type="checkbox"] {
+    display: inline;
+}
+#checkbox-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
