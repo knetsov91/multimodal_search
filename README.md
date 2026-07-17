@@ -72,6 +72,7 @@ Playwright scripts that run the app in a browser and record the session as a gif
 
 - **demo/search_demo.py** — text search, image search and combined text+image search, scrolling through results each time. Saves **assets/text_image_combined_search.gif**.
 - **demo/recipe_edit_demo.py** — admin login, edit a recipe's text, cross-checked against Milvus directly in Attu before and after the edit and against Flower to confirm the Celery task for the edit was created. Saves **assets/recipe_edit_demo.gif**.
+- **demo/recipe_delete_demo.py** — admin login, delete a recipe, cross-checked against Milvus in Attu and against the MinIO console before and after the deletion to confirm both the record and the image are removed. Saves **assets/recipe_delete_demo.gif**.
 
 ### Text, image and combined search
 
@@ -84,3 +85,9 @@ Runs a text search, an image search, then a combined text+image search, scrollin
 Logs in as admin, edits a recipe's text and saves it. Milvus is queried directly in Attu before and after the edit to confirm the underlying record actually changed and Flower is checked before and after to confirm the edit's Celery task was created.
 
 ![Edit recipe demo](assets/recipe_edit_demo.gif)
+
+### Delete a recipe
+
+Logs in as admin, searches for a recipe and deletes it. Milvus is queried directly in Attu and the MinIO console is checked before and after the deletion to confirm both the record and the image are actually removed, not just hidden from the app.
+
+![Delete recipe demo](assets/recipe_delete_demo.gif)
