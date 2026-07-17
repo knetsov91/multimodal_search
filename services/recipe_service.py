@@ -72,4 +72,7 @@ class RecipeService:
 		)
 
 	def delete_recipe(self, id):
+		recipe = self.get_recipe_by_id(id)
 		self.milvus_client.delete(collection_name=self.settings.collection_name, ids=[id])
+		if recipe:
+			self.minio_client.delete_object(recipe[0]["img_name"])

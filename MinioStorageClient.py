@@ -19,6 +19,9 @@ class MinioStorageClient:
 
         return io.BytesIO(file_data)
 
+    def delete_object(self, filename: str):
+        self.minio_client.remove_object(self.bucket_name, filename)
+
     def upload_bytes(self, file_bytes: bytes, filename: str, content_type: str = "application/octet-stream"):
         self.minio_client.put_object(
             bucket_name=self.bucket_name,
