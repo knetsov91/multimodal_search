@@ -71,9 +71,16 @@ Initial recipe data used to seed the app comes from the [RecipeQA NLP dataset](h
 Playwright scripts that run the app in a browser and record the session as a gif. The app must be running at `http://localhost:8081` first.
 
 - **demo/search_demo.py** — text search, image search and combined text+image search, scrolling through results each time. Saves **assets/text_image_combined_search.gif**.
+- **demo/recipe_edit_demo.py** — admin login, edit a recipe's text, cross-checked against Milvus directly in Attu before and after the edit and against Flower to confirm the Celery task for the edit was created. Saves **assets/recipe_edit_demo.gif**.
 
 ### Text, image and combined search
 
 Runs a text search, an image search, then a combined text+image search, scrolling through the results each time.
 
 ![Search demo](assets/text_image_combined_search.gif)
+
+### Edit a recipe
+
+Logs in as admin, edits a recipe's text and saves it. Milvus is queried directly in Attu before and after the edit to confirm the underlying record actually changed and Flower is checked before and after to confirm the edit's Celery task was created.
+
+![Edit recipe demo](assets/recipe_edit_demo.gif)
