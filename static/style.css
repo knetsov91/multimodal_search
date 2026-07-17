@@ -172,7 +172,7 @@ margin: 0 auto;
 .nav-links a:hover{
     color: #ffca28;
 }
-.add-recipe-btn {
+.add-recipe-btn, .show-recipes-btn {
     text-decoration: none;
     background-color: lightgray;
     padding: 10px;
@@ -180,7 +180,7 @@ margin: 0 auto;
     color: black;
 
 }
-.add-recipe-btn:hover {
+.add-recipe-btn:hover, .show-recipes-btn:hover {
         background-color: gray;
 
 }
